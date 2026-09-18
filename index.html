@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelas Perhotelan — SMK Negeri 1 Seririt</title>
+<style>
+  :root{
+    --green-deep:#0F3524;
+    --green-mid:#1F5C3F;
+    --green-soft:#2E7350;
+    --gold:#C6952C;
+    --gold-soft:#E4C877;
+    --cream:#F6F1E4;
+    --charcoal:#1C1712;
+    --clay:#A6461B;
+    --line: rgba(198,149,44,0.35);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--charcoal);
+    font-family:'Work Sans', -apple-system, Segoe UI, sans-serif;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{
+    font-family:'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-weight:600;
+    margin:0;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  .course-tag{
+    font-size:12.5px;
+    letter-spacing:.14em;
+    color:var(--gold);
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .course-tag::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  /* ---------- OPENING ---------- */
+  #opening{
+    position:fixed;inset:0;
+    background:radial-gradient(ellipse at 50% 30%, var(--green-mid), var(--green-deep) 70%);
+    z-index:999;
+    display:flex;align-items:center;justify-content:center;
+    flex-direction:column;
+    animation: openingAutoClose 30s ease forwards;
+  }
+  @keyframes openingAutoClose{
+    0%,90%{opacity:1;visibility:visible;pointer-events:auto;}
+    100%{opacity:0;visibility:hidden;pointer-events:none;}
+  }
+  #opening.skip-now, #opening.skip-now *{animation:none !important;transition:none !important;}
+  #opening.skip-now{opacity:0 !important;visibility:hidden !important;pointer-events:none !important;}
+  .lobby-scene{
+    position:relative;width:280px;height:190px;
+    border-radius:4px;overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+  }
+  .lobby-logo{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;
+    animation: fadeInLogo .6s ease forwards;
+    animation-delay:9.5s;
+  }
+  @keyframes fadeInLogo{ to{opacity:1;} }
+  .lobby-logo .logo-badge{width:140px;height:140px;}
+  .door{
+    position:absolute;top:0;bottom:0;width:50%;
+    background:linear-gradient(160deg,var(--green-mid),var(--green-deep));
+    animation-duration:4s;
+    animation-timing-function:cubic-bezier(.7,0,.2,1);
+    animation-fill-mode:forwards;
+    animation-delay:5s;
+  }
+  .door-left{left:0;border-right:2px solid var(--gold);animation-name:slideDoorLeft;}
+  .door-right{right:0;border-left:2px solid var(--gold);animation-name:slideDoorRight;}
+  @keyframes slideDoorLeft{ to{transform:translateX(-102%);} }
+  @keyframes slideDoorRight{ to{transform:translateX(102%);} }
+  .handle{position:absolute;top:50%;width:6px;height:36px;background:var(--gold);border-radius:3px;transform:translateY(-50%);}
+  .door-left .handle{right:16px;}
+  .door-right .handle{left:16px;}
+  .open-word{
+    margin-top:34px;
+    color:var(--cream);
+    text-align:center;
+    opacity:0;
+    animation:fadeUp .8s ease .35s forwards;
+    max-width:340px;
+    padding:0 20px;
+  }
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  .open-word .display{font-size:22px;color:var(--gold-soft);margin-top:14px;}
+  .open-word .display:first-child{margin-top:0;}
+  .open-word p{margin:6px 0 0;font-size:12.5px;letter-spacing:.03em;line-height:1.5;color:var(--cream);opacity:.85;}
+  #skip-open{
+    position:absolute;bottom:28px;
+    background:none;border:1px solid var(--line);
+    color:var(--cream);
+    font-size:12px;letter-spacing:.06em;
+    padding:9px 18px;border-radius:2px;
+    cursor:pointer;
+  }
+  #skip-open:hover{border-color:var(--gold);}
+
+  @media (prefers-reduced-motion: reduce){
+    #opening *{animation:none !important; transition:none !important;}
+    .door-left{transform:translateX(-102%);}
+    .door-right{transform:translateX(102%);}
+    .lobby-logo,.open-word{opacity:1;}
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(15,53,36,0.96);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 24px;
+    position:relative;
+  }
+  .brand{display:flex;align-items:center;gap:12px;color:var(--cream);text-decoration:none;}
+  .logo-badge{
+    display:inline-flex;
+    border-radius:50%;
+    overflow:hidden;
+    flex-shrink:0;
+    background:transparent;
+  }
+  .brand .logo-badge{width:36px;height:36px;}
+  .brand-text .display{font-size:15px;color:var(--cream);line-height:1.2;}
+  .brand-text span{font-size:11px;color:var(--gold-soft);letter-spacing:.08em;}
+  nav ul{list-style:none;display:flex;gap:26px;margin:0;padding:0;}
+  nav a{
+    color:var(--cream);text-decoration:none;font-size:14px;opacity:.85;
+    padding-bottom:3px;border-bottom:1px solid transparent;
+  }
+  nav a:hover{opacity:1;border-color:var(--gold);}
+  #nav-toggle{display:none;background:none;border:0;color:var(--cream);font-size:22px;cursor:pointer;}
+  @media (max-width:760px){
+    nav ul{
+      position:absolute;top:100%;left:0;right:0;
+      flex-direction:column;background:var(--green-deep);
+      padding:18px 24px;gap:16px;
+      display:none;
+      border-bottom:1px solid var(--line);
+    }
+    nav ul.open{display:flex;}
+    #nav-toggle{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:96px 24px 80px;
+    background:
+      radial-gradient(ellipse at 80% -10%, rgba(198,149,44,0.18), transparent 55%),
+      linear-gradient(180deg, var(--green-deep), #133D29 60%, var(--cream) 100%);
+    color:var(--cream);
+  }
+  .hero-inner{max-width:720px;margin:0 auto;text-align:center;}
+  .hero .course-tag{justify-content:center;color:var(--gold-soft);}
+  .hero .course-tag::after,.hero .course-tag::before{content:"";flex:0 0 34px;height:1px;background:var(--line);}
+  .hero h1{
+    font-size:clamp(34px,6vw,58px);
+    line-height:1.08;
+    margin:22px 0 18px;
+  }
+  .hero h1 em{color:var(--gold-soft);font-style:normal;}
+  .hero p.lede{
+    font-size:17px;line-height:1.7;color:rgba(246,241,228,.85);
+    max-width:540px;margin:0 auto;
+  }
+  .hero-cta{margin-top:34px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+  .btn{
+    display:inline-block;padding:13px 26px;
+    font-size:14px;letter-spacing:.02em;
+    text-decoration:none;border-radius:2px;
+    border:1px solid transparent;
+    transition:transform .2s ease;
+    cursor:pointer;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-gold{background:var(--gold);color:var(--charcoal);}
+  .btn-line{border-color:rgba(246,241,228,.4);color:var(--cream);}
+
+  /* ---------- SECTIONS ---------- */
+  section.course{padding:88px 24px;}
+  section.course:nth-of-type(even){background:#EFE8D4;}
+  .course-head{max-width:640px;margin-bottom:44px;}
+  .course-head h2{font-size:clamp(26px,4vw,38px);margin-top:14px;}
+  .course-head p{margin-top:14px;font-size:15.5px;line-height:1.7;color:#42392C;max-width:560px;}
+
+  /* profil */
+  .profil-grid{
+    display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:start;
+  }
+  .stat-row{display:flex;gap:36px;margin-top:8px;flex-wrap:wrap;}
+  .stat b{font-family:'Playfair Display',serif;font-size:30px;color:var(--green-mid);display:block;}
+  .stat span{font-size:12.5px;color:#5c5142;}
+  .quote-card{
+    background:var(--green-deep);color:var(--cream);
+    padding:34px 30px;border-radius:2px;
+    border-left:3px solid var(--gold);
+  }
+  .quote-card p{font-family:'Playfair Display',serif;font-style:italic;font-size:18px;line-height:1.6;margin:0;}
+  .quote-card span{display:block;margin-top:16px;font-size:12.5px;color:var(--gold-soft);letter-spacing:.05em;}
+
+  /* program keahlian */
+  .skill-list{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--line);}
+  .skill-item{
+    padding:26px 22px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);
+  }
+  .skill-item:nth-child(3n){border-right:none;}
+  .skill-item svg{width:30px;height:30px;color:var(--clay);margin-bottom:14px;}
+  .skill-item h3{font-size:17px;margin-bottom:8px;}
+  .skill-item p{font-size:13.8px;color:#4a4032;line-height:1.55;margin:0;}
+  @media (max-width:760px){
+    .skill-list{grid-template-columns:1fr;}
+    .skill-item{border-right:none;}
+    .profil-grid{grid-template-columns:1fr;}
+  }
+
+  /* galeri */
+  .gallery-grid{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+  }
+  .gallery-grid .g-card{grid-column:span 2;}
+  .gallery-grid .g-card.wide{grid-column:span 4;}
+  .g-card{
+    aspect-ratio:4/3;border-radius:2px;overflow:hidden;position:relative;
+    display:flex;align-items:flex-end;
+    color:#fff;
+  }
+  .g-card .g-label{
+    position:relative;padding:16px;font-size:13.5px;
+    background:linear-gradient(0deg, rgba(0,0,0,.62), transparent 70%);
+    width:100%;
+  }
+  @media (max-width:760px){
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .gallery-grid .g-card{grid-column:span 2;}
+  }
+
+  /* prestasi */
+  .achieve-list{border-top:1px solid var(--line);}
+  .achieve-item{
+    display:grid;grid-template-columns:110px 1fr;gap:24px;
+    padding:20px 0;border-bottom:1px solid var(--line);
+  }
+  .achieve-item .yr{font-family:'Playfair Display',serif;color:var(--gold);font-size:20px;}
+  .achieve-item h3{font-size:16.5px;margin-bottom:4px;}
+  .achieve-item p{font-size:13.8px;color:#4a4032;margin:0;}
+
+  /* tim */
+  .team-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:28px 18px;
+  }
+  @media (min-width:640px){
+    .team-grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+  }
+  .team-card{text-align:left;min-width:0;}
+  .avatar-wrap{
+    position:relative;
+    width:150px;height:150px;
+    margin-bottom:14px;
+  }
+  .avatar{
+    width:150px;height:150px;
+    aspect-ratio:1;
+    border-radius:50%;
+    overflow:hidden;
+    background:linear-gradient(155deg,var(--green-mid),var(--green-deep));
+    display:flex;align-items:center;justify-content:center;
+  }
+  .avatar img{width:100%;height:100%;object-fit:cover;display:block;}
+  .avatar svg{width:40%;height:40%;color:var(--gold-soft);opacity:.85;}
+  .avatar-edit{
+    position:absolute;right:2px;bottom:2px;
+    width:34px;height:34px;border-radius:50%;
+    background:var(--gold);color:var(--charcoal);
+    border:2px solid var(--cream);
+    font-size:15px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+  }
+  .avatar-edit:hover{background:var(--gold-soft);}
+  .avatar-status{
+    display:block;margin-top:2px;font-size:11px;color:var(--green-mid);min-height:14px;
+  }
+  .team-card h3{font-size:15.5px;line-height:1.4;}
+  .team-card span.role{font-size:12.5px;color:var(--clay);}
+  .team-subhead{
+    grid-column:1/-1;
+    margin-top:22px;
+    font-size:18px;
+    color:var(--green-mid);
+    text-align:center;
+  }
+  @media (max-width:760px){
+    .avatar-wrap,.avatar{width:120px;height:120px;}
+  }
+
+  /* kontak */
+  footer{
+    background:var(--green-deep);color:var(--cream);
+    padding:70px 24px 30px;
+  }
+  .foot-inner{max-width:900px;margin:0 auto;}
+  .foot-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;}
+  .foot-brand .display{font-size:20px;color:var(--cream);}
+  .foot-brand p{font-size:13.5px;color:rgba(246,241,228,.7);max-width:280px;line-height:1.6;margin-top:10px;}
+  .foot-col h4{font-size:12.5px;letter-spacing:.1em;color:var(--gold-soft);margin-bottom:14px;}
+  .foot-col a{display:block;font-size:14px;color:rgba(246,241,228,.85);text-decoration:none;margin-bottom:9px;}
+  .foot-col a:hover{color:var(--gold-soft);}
+  .foot-bottom{
+    margin-top:56px;padding-top:20px;border-top:1px solid rgba(246,241,228,.15);
+    font-size:12.5px;color:rgba(246,241,228,.55);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ OPENING ============ -->
+<div id="opening">
+  <div class="lobby-scene">
+    <div class="door door-left"><div class="handle"></div></div>
+    <div class="door door-right"><div class="handle"></div></div>
+    <div class="lobby-logo">
+      <span class="logo-badge"><img src="logo.jpg" alt="Logo Perhotelan XP1 - SMK Negeri 1 Seririt" style="width:100%;height:100%;object-fit:cover;display:block;"></span>
+    </div>
+  </div>
+  <div class="open-word">
+    <div class="display">HOSPITALITY 1</div>
+    <p>WELCOME TO CLASS HOSPITALITY &nbsp;·&nbsp; PORTOFOLIO KELAS PERHOTELAN</p>
+    <div class="display">PENGERTIAN HOSPITALITY</div>
+    <p>Hospitality adalah sikap dan pelayanan yang diberikan kepada tamu dengan ramah, sopan, nyaman, dan penuh perhatian agar tamu merasa dihargai dan puas.</p>
+  </div>
+  <button id="skip-open" type="button">Lewati &nbsp;→</button>
+  <audio id="hospitality-audio" src="hospitality.mp3" preload="auto"></audio>
+</div>
+
+<!-- ============ NAV ============ -->
+<header>
+  <div class="nav-inner wrap" style="padding-left:0;padding-right:0;">
+    <a class="brand" href="#top">
+      <span class="logo-badge"><img src="logo.jpg" alt="Logo Perhotelan XP1 - SMK Negeri 1 Seririt" style="width:100%;height:100%;object-fit:cover;display:block;"></span>
+      <span class="brand-text">
+        <span class="display" style="display:block;">SMKN 1 Seririt</span>
+        <span>PERHOTELAN</span>
+      </span>
+    </a>
+    <button id="nav-toggle" aria-label="Buka menu">☰</button>
+    <nav>
+      <ul id="nav-links">
+        <li><a href="#tim">Wali Kelas & Tim</a></li>
+        <li><a href="#profil">Profil</a></li>
+        <li><a href="#program">Program</a></li>
+        <li><a href="#galeri">Galeri Karya</a></li>
+        <li><a href="#prestasi">Prestasi</a></li>
+        <li><a href="#kontak">Kontak</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div class="course-tag">SELAMAT DATANG</div>
+    <h1>Website class <em>Perhotelan</em></h1>
+    <p class="lede">Dari front office hingga meja tamu — inilah karya, keterampilan, dan cerita kelas Perhotelan kami di SMK Negeri 1 Seririt, disiapkan dengan standar layanan hospitality kelas industri.</p>
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="#galeri">Lihat Galeri Karya</a>
+      <a class="btn btn-line" href="#profil">Kenali Kelas Kami</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WALI KELAS & TIM ============ -->
+<section class="course" id="tim">
+  <div class="wrap">
+    <div class="course-head">
+      <div class="course-tag">CHECK-IN — SALAM DARI KAMI</div>
+      <h2>Wali kelas & siswa</h2>
+      <p>Ketuk ikon kamera di foto masing-masing untuk mengisi foto sendiri — langsung tersimpan dan tampil buat semua orang yang membuka halaman ini.</p>
+      <h3 style="margin-top:28px;font-size:20px;color:var(--green-mid);text-align:center;">Struktur Kelas</h3>
+    </div>
+    <div class="team-grid" id="team-grid">
+      <div class="team-card" data-name="I Nyoman Winaya, S.Pd">
+        <div class="avatar-wrap">
+          <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+          <input type="file" accept="image/*" hidden>
+        </div>
+        <h3>I Nyoman Winaya, S.Pd</h3><span class="role">Wali Kelas</span>
+        <span class="avatar-status" data-status></span>
+      </div>
+
+      <div class="team-card" data-name="Putu Adelya Helmina Sari">
+        <div class="avatar-wrap">
+          <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+          <input type="file" accept="image/*" hidden>
+        </div>
+        <h3>Putu Adelya Helmina Sari</h3><span class="role">Ketua Kelas</span>
+        <span class="avatar-status" data-status></span>
+      </div>
+
+      <div class="team-card" data-name="Putu Putra Adnyana">
+        <div class="avatar-wrap">
+          <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+          <input type="file" accept="image/*" hidden>
+        </div>
+        <h3>Putu Putra Adnyana</h3><span class="role">Wakil Ketua Kelas</span>
+        <span class="avatar-status" data-status></span>
+      </div>
+
+      <div class="team-card" data-name="Niluh Darmayanti">
+        <div class="avatar-wrap">
+          <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+          <input type="file" accept="image/*" hidden>
+        </div>
+        <h3>Niluh Darmayanti</h3><span class="role">Serketaris 1</span>
+        <span class="avatar-status" data-status></span>
+      </div>
+
+      <div class="team-card" data-name="I Gusti Ayu Candra Is Suari">
+        <div class="avatar-wrap">
+          <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+          <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+          <input type="file" accept="image/*" hidden>
+        </div>
+        <h3>I Gusti Ayu Candra Is Suari</h3><span class="role">Serketaris 2</span>
+        <span class="avatar-status" data-status></span>
+      </div>
+
+      <div class="team-card" data-name="Nama Siswa">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Komang Ayu Candra Dewi</h3><span class="role">Bendahar 1</span>
+  <span class="avatar-status" data-status></span>
+      </div>
+
+      <div class="team-card" data-name="Nama Siswa">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Komang Aditya Januarta</h3><span class="role">Anggota</span>
+  <span class="avatar-status" data-status></span>
+      </div>
+
+      <div class="team-card" data-name="Nama Siswa">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>GEDE ARIYASA</h3><span class="role">Pengurus Umum</span>
+  <span class="avatar-status" data-status></span>
+      </div>
+
+      <h3 class="team-subhead">Anggota Kelas</h3>
+      <div class="team-card" data-name="GEDE ARIYASA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>GEDE ARIYASA</h3><span class="role">absen:1</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Gede Radit Ariesta">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Gede Radit Ariesta</h3><span class="role">absen:2</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="GEDE RADITYA MAHIJA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>GEDE RADITYA MAHIJA</h3><span class="role">absen:3</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Gede Riski Ariawan">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Gede Riski Ariawan</h3><span class="role">absen:4</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Gusti Agung Made Satria Dinata">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Gusti Agung Made Satria Dinata</h3><span class="role">absen:5</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="I GUSTI AGUNG ADI SAPUTRA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>I GUSTI AGUNG ADI SAPUTRA</h3><span class="role">absen:6</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="I Gusti Ayu Candra Is Suari">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>I Gusti Ayu Candra Is Suari</h3><span class="role">absen:7</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="I GUSTI AYU PARSINI">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>I GUSTI AYU PARSINI</h3><span class="role">absen:8</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="I Gusti Bagus Muliana">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>I Gusti Bagus Muliana</h3><span class="role">absen:9</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="I GUSTI KETUT AGUNG INDRAWAN">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>I GUSTI KETUT AGUNG INDRAWAN</h3><span class="role">absen:10</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="I KADEK RISKI ADITIA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>I KADEK RISKI ADITIA</h3><span class="role">absen:11</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="KADEK ADI ARYA WIGUNA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>KADEK ADI ARYA WIGUNA</h3><span class="role">absen:12</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+      <div class="team-card" data-name="KADEK RATIH ARYANI">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>KADEK RATIH ARYANI</h3><span class="role">absen:13</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Kadek Silvia Febryani">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Kadek Silvia Febryani</h3><span class="role">absen:14</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="KETUT BINTANG MARTINI">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>KETUT BINTANG MARTINI</h3><span class="role">absen:15</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Ketut Desi Natalia">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Ketut Desi Natalia</h3><span class="role">absen:16</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="KETUT JUNIARTA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>KETUT JUNIARTA</h3><span class="role">absen:17</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="KETUT SRININGSIH">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>KETUT SRININGSIH</h3><span class="role">absen:18</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Komang Aditya Januarta">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Komang Aditya Januarta</h3><span class="role">absen:19</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Komang Ayu Candra Dewi">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Komang Ayu Candra Dewi</h3><span class="role">absen:20</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="KOMANG MERTA YASA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>KOMANG MERTA YASA</h3><span class="role">absen:21</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="LUH SARIANI">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>LUH SARIANI</h3><span class="role">absen:22</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="LUH VIDYA DEWI">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>LUH VIDYA DEWI</h3><span class="role">absen:23</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Ni kadek Wahyuni">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2-8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Ni kadek Wahyuni</h3><span class="role">absen:24</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="NI LUH DAMAYANTI">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>NI LUH DAMAYANTI</h3><span class="role">absen:25</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="PUTU ADELYA HELMINA SARI">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>PUTU ADELYA HELMINA SARI</h3><span class="role">absen:26</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Putu Andi Pratama">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Putu Andi Pratama</h3><span class="role">absen:27</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Putu Ardi Purnama">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Putu Ardi Purnama</h3><span class="role">absen:28</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Putu Budiarsana">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Putu Budiarsana</h3><span class="role">absen:29</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="PUTU DEVASYA ARYA UTAMA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>PUTU DEVASYA ARYA UTAMA</h3><span class="role">absen:30</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Putu Gede Panji Saputra">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Putu Gede Panji Saputra</h3><span class="role">absen:31</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="Putu Murni">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>Putu Murni</h3><span class="role">absen:32</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="PUTU PUTRA ADNYANA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>PUTU PUTRA ADNYANA</h3><span class="role">absen:33</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="PUTU REPA SANIAYA">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>PUTU REPA SANIAYA</h3><span class="role">absen:34</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+<div class="team-card" data-name="PUTU YUNIARTINI">
+  <div class="avatar-wrap">
+    <div class="avatar" data-avatar><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+    <button class="avatar-edit" type="button" title="Ganti foto">📷</button>
+    <input type="file" accept="image/*" hidden>
+  </div>
+  <h3>PUTU YUNIARTINI</h3><span class="role">absen:35</span>
+  <span class="avatar-status" data-status></span>
+</div>
+
+      
+    <p style="margin-top:22px;font-size:18px;color:#5c5142;">Semua wajib menaro foto di nama kalian 
+      masing masing .</p>
+  </div>
+</section>
+
+<!-- ============ PROFIL ============ -->
+<section class="course" id="profil">
+  <div class="wrap">
+    <div class="course-head">
+      <div class="course-tag">IN-HOUSE — PROFIL KELAS</div>
+      <h2>Satu kelas, satu standar layanan</h2>
+      <p>Kelas kami menempuh Konsentrasi Keahlian Perhotelan, memadukan keterampilan front office, housekeeping, dan food & beverage service dalam satu kurikulum berbasis praktik industri.</p>
+    </div>
+    <div class="profil-grid">
+      <div>
+        <div class="stat-row">
+          <div class="stat"><b>35</b><span>Jumlah siswa</span></div>
+          <div class="stat"><b></b><span>Jumblah perempuan</span></div>
+          <div class="stat"><b></b><span>Jumblah laki-laki</span></div>
+        </div>
+        <p style="margin-top:28px;font-size:15px;line-height:1.75;color:#42392C;">
+          Setiap pekan, kami bergantian peran: hari ini menjadi petugas front office yang menyambut tamu, esok menjadi tim housekeeping yang merapikan kamar. Rotasi ini membentuk lulusan yang siap kerja di seluruh lini operasional hotel.
+        </p>
+      </div>
+      <div class="quote-card">
+        <p>"Melangkah pasti menjadi generasi yang cerdas, disiplin, dan kreatif — itu yang kami bawa dari ruang praktik ke meja tamu."</p>
+        <span>— Wali Kelas, Kelas Perhotelan</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROGRAM ============ -->
+<section class="course" id="program">
+  <div class="wrap">
+    <div class="course-head">
+      <div class="course-tag">LAYANAN UTAMA — PROGRAM KEAHLIAN</div>
+      <h2>Kompetensi yang kami latih</h2>
+      <p>Tiga pilar utama membentuk keahlian kelas kami, dipraktikkan langsung di ruang praktik front office dan tata hidang sekolah.</p>
+    </div>
+    <div class="skill-list">
+      <div class="skill-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h18M5 8v12h14V8M9 12h6M12 3v5"/></svg>
+        <h3>Front Office & Reservasi</h3>
+        <p>Penanganan check-in/check-out, reservasi, dan penanganan keluhan tamu.</p>
+      </div>
+      <div class="skill-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 19h16M6 19V7l6-4 6 4v12M9 19v-6h6v6"/></svg>
+        <h3>Tata Graha & Akomodasi</h3>
+        <p>Standar housekeeping, penataan kamar, dan pengelolaan area tamu hotel.</p>
+      </div>
+      <div class="skill-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 10h18M5 10v9h14v-9M9 21v-6h6v6"/></svg>
+        <h3>Tata Hidang & Layanan</h3>
+        <p>Etika pelayanan, table setting, hingga penanganan tamu di acara formal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALERI ============ -->
+<section class="course" id="galeri">
+  <div class="wrap">
+    <div class="course-head">
+      <div class="course-tag">LAYANAN UTAMA — GALERI KARYA</div>
+      <h2>Dari ruang praktik ke meja tamu</h2>
+      <p>Sebagian momen praktik kelas — akan diperbarui dengan foto asli seiring kegiatan berjalan.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="g-card wide" style="background:linear-gradient(120deg,#1F5C3F,#0F3524);">
+        <div class="g-label">Simulasi Front Office</div>
+      </div>
+      <div class="g-card" style="background:linear-gradient(120deg,#2E7350,#0F3524);">
+        <div class="g-label">Praktik Tata Graha</div>
+      </div>
+      <div class="g-card" style="background:linear-gradient(120deg,#A6461B,#5c2510);">
+        <div class="g-label">Praktik Tata Hidang</div>
+      </div>
+    </div>
+    <p style="margin-top:18px;font-size:12.5px;color:#5c5142;">Ganti blok <code>.g-card</code> di atas dengan foto asli kegiatan kelas kapan saja.</p>
+  </div>
+</section>
+
+<!-- ============ PRESTASI ============ -->
+<section class="course" id="prestasi">
+  <div class="wrap">
+    <div class="course-head">
+      <div class="course-tag">REKAM JEJAK — PRESTASI</div>
+      <h2>Pencapaian kelas</h2>
+      <p>Isi daftar di bawah dengan prestasi lomba, sertifikasi, atau kegiatan magang yang pernah diraih kelas.</p>
+    </div>
+    <div class="achieve-list">
+      <div class="achieve-item">
+        <div class="yr">2026</div>
+        <div><h3>Contoh prestasi — ganti dengan data asli</h3><p>Deskripsi singkat pencapaian.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KONTAK / FOOTER ============ -->
+<footer id="kontak">
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="display">SMKN 1 Seririt</div>
+        <p>Kelas Perhotelan — Konsentrasi Keahlian Perhotelan, SMK Negeri 1 Seririt.</p>
+      </div>
+      <div class="foot-col">
+        <h4>NAVIGASI</h4>
+        <a href="#tim">Wali Kelas & Tim</a>
+        <a href="#profil">Profil</a>
+        <a href="#program">Program</a>
+        <a href="#galeri">Galeri Karya</a>
+      </div>
+      <div class="foot-col">
+        <h4>KONTAK</h4>
+        <a href="#">SMK NEGERI 1 SERIRIT</a>
+        <a href="#">Email / Instagram kelas — isi di sini</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Kelas Perhotelan, SMK Negeri 1 Seririt.</span>
+      <span class="draft-note">Dibuat oleh INDRAWAN</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ FIREBASE ============ -->
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+
+<script>
+  // ---- Konfigurasi Firebase (project: xp1-hospitality) ----
+  const firebaseConfig = {
+    apiKey: "AIzaSyDKurXP0w-9pE8FvqrcDHn8Ek1s6N0Brwk",
+    authDomain: "xp1-hospitality.firebaseapp.com",
+    projectId: "xp1-hospitality",
+    appId: "1:51001265090:web:97453bf1b820a910a8a45b"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  function slugify(name){
+    return name.toLowerCase()
+      .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+      .replace(/[^a-z0-9]+/g,"-")
+      .replace(/(^-|-$)/g,"");
+  }
+
+  // Kompres & ubah foto jadi data URL langsung di browser (tanpa Storage,
+  // jadi tidak ada masalah CORS sama sekali), lalu disimpan di Firestore.
+  function compressImage(file, maxSize){
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = e => { img.src = e.target.result; };
+      reader.onerror = reject;
+      img.onload = () => {
+        const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(img.width * scale);
+        canvas.height = Math.round(img.height * scale);
+        canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL("image/jpeg", 0.7));
+      };
+      img.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.querySelectorAll(".team-card[data-name]").forEach(card => {
+    const name = card.getAttribute("data-name");
+    const slug = slugify(name);
+    const avatarBox = card.querySelector("[data-avatar]");
+    const editBtn = card.querySelector(".avatar-edit");
+    const fileInput = card.querySelector('input[type="file"]');
+    const status = card.querySelector("[data-status]");
+
+    function setPhoto(url){
+      avatarBox.innerHTML = '<img src="' + url + '" alt="Foto ' + name + '">';
+    }
+
+    // Dengarkan perubahan secara real-time: begitu seseorang upload foto,
+    // semua orang yang sedang membuka halaman ini langsung melihatnya,
+    // dan foto tetap ada setiap kali halaman dibuka ulang.
+    db.collection("profiles").doc(slug).onSnapshot(doc => {
+      if (doc.exists && doc.data().photoUrl) {
+        setPhoto(doc.data().photoUrl);
+      }
+    }, err => console.error("Gagal memuat foto", name, err));
+
+    editBtn.addEventListener("click", () => fileInput.click());
+
+    fileInput.addEventListener("change", async () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        status.textContent = "File harus berupa foto.";
+        return;
+      }
+      try {
+        status.textContent = "Menyimpan…";
+        const dataUrl = await compressImage(file, 480);
+        if (dataUrl.length > 900000) {
+          status.textContent = "Foto terlalu besar, pakai foto lain.";
+          return;
+        }
+        await db.collection("profiles").doc(slug).set({
+          photoUrl: dataUrl,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        status.textContent = "Tersimpan ✓";
+        setTimeout(() => { status.textContent = ""; }, 2500);
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Gagal: " + (err && err.message ? err.message : err);
+      } finally {
+        fileInput.value = "";
+      }
+    });
+  });
+</script>
+
+<!-- ============ INTERAKSI UMUM ============ -->
+<script>
+  const opening = document.getElementById("opening");
+  document.getElementById("skip-open").addEventListener("click", () => {
+    opening.classList.add("skip-now");
+    opening.style.display = "none";
+  });
+  opening.addEventListener("animationend", () => {
+    opening.style.display = "none";
+  });
+  // Jaring pengaman: kalau animationend tidak terpicu (mis. mode hemat baterai/animasi dikurangi),
+  // opening tetap otomatis tertutup setelah beberapa detik.
+  setTimeout(() => {
+    if (opening.style.display !== "none") opening.style.display = "none";
+  }, 809800);
+
+  const navToggle = document.getElementById("nav-toggle");
+  const navLinks = document.getElementById("nav-links");
+  navToggle.addEventListener("click", () => navLinks.classList.toggle("open"));
+  navLinks.querySelectorAll("a").forEach(a => a.addEventListener("click", () => navLinks.classList.remove("open")));
+</script>
+
+</body>
+</html>
